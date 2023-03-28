@@ -27,11 +27,11 @@ enum Action {
         glob: String,
     },
     Derive {
-        #[clap(short, long, default_value_t = String::from(".manifest.yaml"), value_parser)]
+        #[clap(long, default_value_t = String::from(".manifest.yaml"), value_parser)]
         config: String,
-        #[clap(short, long)]
+        #[clap(long)]
         head: Option<String>,
-        #[clap(short, long)]
+        #[clap(long)]
         base: Option<String>,
     },
 }
@@ -57,6 +57,11 @@ fn main() -> Result<()> {
 
     let repo = Repository::discover(".").unwrap();
     let cli = Cli::parse();
+
+    let current_branch = git::get_current_branch(&repo)?;
+    let latest_commit = git::get_branch_commit_hash(&repo, &current_branch)?;
+
+    eprintln!("{current_branch:?}, {latest_commit:?}");
 
     match cli.action {
         Action::GetDeployableRef { glob: _ } => {}
