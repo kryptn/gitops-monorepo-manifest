@@ -26,11 +26,12 @@ enum Action {
     GetDeployableRef {
         glob: String,
     },
-    BuildManifest {
-        with_diffs: Option<String>,
-        #[clap(default_value_t = String::from(".manifest.yaml"), value_parser)]
-        manifest_config: String,
+    Derive {
+        #[clap(short, long, default_value_t = String::from(".manifest.yaml"), value_parser)]
+        config: String,
+        #[clap(short, long)]
         head: Option<String>,
+        #[clap(short, long)]
         base: Option<String>,
     },
 }
@@ -59,13 +60,12 @@ fn main() -> Result<()> {
 
     match cli.action {
         Action::GetDeployableRef { glob: _ } => {}
-        Action::BuildManifest {
-            manifest_config,
-            with_diffs,
+        Action::Derive {
+            config,
             head,
             base,
         } => {
-            let mut manifest = manifest::Manifest::new_from_path(&manifest_config)?;
+            let mut manifest = manifest::Manifest::new_from_path(&config)?;
             let head = match head {
                 Some(v) => v,
                 None => git::get_current_branch(&repo)?,
@@ -79,13 +79,7 @@ fn main() -> Result<()> {
             let head_sha = git::get_branch_commit_hash(&repo, &head)?;
             let merge_base_sha = git::get_merge_base(&repo, &base, &head)?;
 
-            let diffs = match with_diffs {
-                Some(given) => fs::read_to_string(given)?
-                    .lines()
-                    .map(|line| line.trim().to_string())
-                    .collect(),
-                None => git::get_changed_files(&repo, &merge_base_sha, &head_sha)?,
-            };
+            let diffs = git::get_changed_files(&repo, &merge_base_sha, &head_sha)?;
 
             manifest.resolve(&diffs);
 
