@@ -10,7 +10,9 @@ pub fn get_branch_commit<'a>(
 }
 
 pub fn get_branch_commit_hash(repo: &Repository, branch_name: &str) -> Result<String, git2::Error> {
-    let reference = repo.find_branch(branch_name, git2::BranchType::Local)?;
+    let reference = repo
+        .find_branch(branch_name, git2::BranchType::Local)
+        .or(repo.find_branch(branch_name, git2::BranchType::Remote))?;
     let commit = reference.into_reference().peel_to_commit()?;
     Ok(commit.id().to_string())
 }
