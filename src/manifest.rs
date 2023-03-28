@@ -6,7 +6,7 @@ use std::{
 use anyhow::Result;
 use glob::Pattern;
 use serde::{Deserialize, Serialize};
-use tracing::{debug, info, trace};
+use tracing::{debug, trace};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Target {

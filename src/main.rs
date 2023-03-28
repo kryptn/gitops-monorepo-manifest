@@ -1,8 +1,8 @@
 use std::{collections::HashMap, fs};
 
 use clap::Parser;
-use git2::{DiffOptions, Repository, Tree};
-use serde::{Deserialize, Serialize};
+use git2::Repository;
+use serde::Serialize;
 
 use anyhow::Result;
 use tracing::Level;
@@ -58,7 +58,7 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.action {
-        Action::GetDeployableRef { glob } => {}
+        Action::GetDeployableRef { glob: _ } => {}
         Action::BuildManifest {
             manifest_config,
             with_diffs,
