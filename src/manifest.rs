@@ -83,7 +83,7 @@ impl From<Targets> for Manifest {
 impl Manifest {
     #[tracing::instrument]
     fn new_from_str(contents: &str) -> Result<Self> {
-        let targets: Targets = serde_yaml::from_str(&contents)?;
+        let targets: Targets = serde_yaml::from_str(contents)?;
         let manifest = Manifest::from(targets);
         Ok(manifest)
     }
@@ -147,8 +147,7 @@ impl Manifest {
         trace!("resolving manifest");
         self.activated = changed_files
             .iter()
-            .map(|p| self.test_path(p))
-            .flatten()
+            .flat_map(|p| self.test_path(p))
             .collect();
 
         let mut i = 0;
@@ -167,8 +166,8 @@ impl Manifest {
     pub fn activated_targets(&self) -> Vec<(String, bool)> {
         self.targets
             .targets
-            .iter()
-            .map(|(target, _)| (target.clone(), self.activated.contains(target)))
+            .keys()
+            .map(|target| (target.clone(), self.activated.contains(target)))
             .collect()
     }
 }
