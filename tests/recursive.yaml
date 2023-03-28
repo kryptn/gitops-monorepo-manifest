@@ -1,0 +1,14 @@
+base: develop
+targets:
+  service-a:
+    path: file-a*
+    activated_by:
+      - service-b
+
+  service-b:
+    path: file-b*
+    activated_by:
+      - service-a
+
+  service-c:
+    path: file-c*

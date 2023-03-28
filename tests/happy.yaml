@@ -1,0 +1,14 @@
+base: develop
+targets:
+  service-a:
+    path: file-a*
+    activated_by:
+      - common-dependency
+
+  service-b:
+    path: file-b*
+    activated_by:
+      - common-dependency
+
+  common-dependency:
+    path: dep.txt
