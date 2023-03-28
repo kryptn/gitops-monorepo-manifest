@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs};
+use std::collections::HashMap;
 
 use clap::Parser;
 use git2::Repository;
@@ -60,11 +60,7 @@ fn main() -> Result<()> {
 
     match cli.action {
         Action::GetDeployableRef { glob: _ } => {}
-        Action::Derive {
-            config,
-            head,
-            base,
-        } => {
+        Action::Derive { config, head, base } => {
             let mut manifest = manifest::Manifest::new_from_path(&config)?;
             let head = match head {
                 Some(v) => v,
