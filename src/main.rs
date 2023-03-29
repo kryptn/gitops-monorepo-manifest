@@ -65,16 +65,6 @@ struct TargetOutput {
     sha: String,
 }
 
-impl TargetOutput {
-    fn sha_output(&self, name: &str) -> String {
-        format!("")
-    }
-
-    fn changed_output(&self, name: &str) -> String {
-        format!("")
-    }
-}
-
 fn write_output(output: &HashMap<String, TargetOutput>) -> Result<()> {
     let (mut changed, mut unchanged): (Vec<_>, Vec<_>) =
         output.keys().partition(|k| output[*k].changed);
@@ -87,11 +77,13 @@ fn write_output(output: &HashMap<String, TargetOutput>) -> Result<()> {
         .append(true)
         .open(output_file)?;
 
+    let manifest = serde_json::to_string(&output)?;
     let changed_str = serde_json::to_string(&changed)?;
     let unchanged_str = serde_json::to_string(&unchanged)?;
 
+    writeln!(file, "manifest={}", manifest)?;
     writeln!(file, "changed_targets={}", changed_str)?;
-    writeln!(file, "changed_targets={}", unchanged_str)?;
+    writeln!(file, "unchanged_targets={}", unchanged_str)?;
 
     Ok(())
 }
