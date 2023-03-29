@@ -12,6 +12,8 @@ use tracing::{debug, trace};
 pub struct Target {
     pub path: String,
     #[serde(default)]
+    pub resistance: u8,
+    #[serde(default)]
     pub globs: HashSet<String>,
     #[serde(default, alias = "activated_by")]
     pub activated_by: HashSet<String>,
@@ -143,8 +145,22 @@ impl Manifest {
     }
 
     #[tracing::instrument(skip(self))]
-    pub fn resolve(&mut self, changed_files: &Vec<String>) {
+    pub fn resolve(&mut self, changed_files: &Vec<String>, force: u8) {
         trace!("resolving manifest");
+
+        if force > 0 {
+            self.activated
+                .extend(self.targets.targets.iter().filter_map(|(k, v)| {
+                    if v.resistance <= force {
+                        Some(k.clone())
+                    } else {
+                        None
+                    }
+                }));
+
+            return;
+        }
+
         self.activated = changed_files
             .iter()
             .flat_map(|p| self.test_path(p))
@@ -193,7 +209,7 @@ mod test {
     fn test_happy_path(#[case] files: Vec<String>, #[case] expected: HashSet<String>) {
         let mut manifest = Manifest::new_from_path("./tests/happy.yaml").expect("known good");
 
-        manifest.resolve(&files);
+        manifest.resolve(&files, 0);
 
         assert_eq!(manifest.activated, expected);
     }
@@ -206,7 +222,7 @@ mod test {
     fn test_chain(#[case] files: Vec<String>, #[case] expected: HashSet<String>) {
         let mut manifest = Manifest::new_from_path("./tests/chain.yaml").expect("known good");
 
-        manifest.resolve(&files);
+        manifest.resolve(&files, 0);
         assert_eq!(manifest.activated, expected);
     }
 
@@ -217,7 +233,7 @@ mod test {
     fn test_recursive_activation(#[case] files: Vec<String>, #[case] expected: HashSet<String>) {
         let mut manifest = Manifest::new_from_path("./tests/recursive.yaml").expect("known good");
 
-        manifest.resolve(&files);
+        manifest.resolve(&files, 0);
         assert_eq!(manifest.activated, expected);
     }
 }
