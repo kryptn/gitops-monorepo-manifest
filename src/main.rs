@@ -40,6 +40,9 @@ enum Action {
         /// Forces all services to be activated
         #[clap(long, short, action = clap::ArgAction::Count)]
         force: u8,
+        /// Apply force if building on base
+        #[clap(long, default_value_t = false)]
+        force_on_base: bool,
         /// Write manifest into github actions output
         #[clap(long, default_value_t = false)]
         actions_output: bool,
@@ -133,6 +136,7 @@ fn main() -> Result<()> {
             force,
             actions_output,
             step_summary,
+            force_on_base,
         } => {
             let mut manifest = manifest::Manifest::new_from_path(&config)?;
             let head = match head {
@@ -143,6 +147,12 @@ fn main() -> Result<()> {
             let base = match base {
                 Some(v) => v,
                 None => manifest.base().to_string(),
+            };
+
+            let force = if force_on_base && manifest.base() == &head {
+                force + 1
+            } else {
+                force
             };
 
             let head_sha = git::get_branch_commit_hash(&repo, &head)?;
