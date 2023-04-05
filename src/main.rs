@@ -84,9 +84,9 @@ fn write_output(output: &HashMap<String, TargetOutput>) -> Result<()> {
     let changed_str = serde_json::to_string(&changed)?;
     let unchanged_str = serde_json::to_string(&unchanged)?;
 
-    writeln!(file, "manifest={}", manifest)?;
-    writeln!(file, "changed_targets={}", changed_str)?;
-    writeln!(file, "unchanged_targets={}", unchanged_str)?;
+    writeln!(file, "manifest='{}'", manifest)?;
+    writeln!(file, "changed_targets='{}'", changed_str)?;
+    writeln!(file, "unchanged_targets='{}'", unchanged_str)?;
 
     Ok(())
 }
