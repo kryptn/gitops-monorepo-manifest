@@ -64,3 +64,14 @@ targets:
 `.targets[].globs[].` | an additional list of paths that will activate the target
 `.targets[].activated_by[].` | a list of targets that will activate this target when activated
 
+## Github Actions
+
+Built with github actions in mind, there's a couple flags that'll write to files provided by github actions.
+
+`--actions-output` will append three outputs to the file `$GITHUB_OUTPUT`
+
+- `manifest`, a encoded json object with derived manifest output
+- `changed_targets`, an encoded json list of targets that have changed
+- `unchanged_targets`, an encoded json list of targets that have not changed
+
+`--step-summary` will write a pretty-printed json manifest into the file at `$GITHUB_STEP_SUMMARY` and will show on the summary page for your github action.
