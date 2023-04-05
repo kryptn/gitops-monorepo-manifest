@@ -21,6 +21,7 @@ Options:
       --head <HEAD>      Defaults to the current branch
       --base <BASE>      Defaults to the base defined in the manifest config
   -f, --force...         Forces all services to be activated
+      --force-on-base    Apply force if building on base
       --actions-output   Write manifest into github actions output
       --step-summary     Write manifest summary into github actions step summary
   -h, --help             Print help
