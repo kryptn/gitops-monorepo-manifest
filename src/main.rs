@@ -149,7 +149,7 @@ fn main() -> Result<()> {
                 None => manifest.base().to_string(),
             };
 
-            let force = if force_on_base && manifest.base() == &head {
+            let force = if force_on_base && manifest.base() == head {
                 force + 1
             } else {
                 force
