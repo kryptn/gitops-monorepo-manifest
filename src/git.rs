@@ -1,4 +1,4 @@
-use git2::{BranchType, Commit, DiffOptions, Error, Repository, Tree};
+use git2::{Commit, DiffOptions, Error, Repository, Tree};
 
 pub fn get_branch_commit<'a>(
     repo: &'a Repository,
@@ -80,20 +80,4 @@ pub fn get_changed_files(
     changed_files.sort();
 
     Ok(changed_files)
-}
-
-pub fn get_all_branches(
-    repo: &Repository,
-    branch_filter: Option<BranchType>,
-) -> Result<Vec<String>, Error> {
-    let mut branches = Vec::new();
-
-    for branch_result in repo.branches(branch_filter)? {
-        let (branch, _) = branch_result?;
-        if let Some(branch_name) = branch.name()? {
-            branches.push(branch_name.to_string());
-        }
-    }
-
-    Ok(branches)
 }

@@ -27,7 +27,6 @@ enum Action {
     GetDeployableRef {
         glob: String,
     },
-    ShowBranches,
     Derive {
         #[clap(long, default_value_t = String::from(".manifest.yaml"), value_parser)]
         config: String,
@@ -121,14 +120,6 @@ fn main() -> Result<()> {
 
     match cli.action {
         Action::GetDeployableRef { glob: _ } => {}
-        Action::ShowBranches => {
-            let branches = git::get_all_branches(&repo, None)?;
-            println!("no filter: \n{}\n", branches.join("\n"));
-            let branches = git::get_all_branches(&repo, Some(git2::BranchType::Local))?;
-            println!("local filter: \n{}\n", branches.join("\n"));
-            let branches = git::get_all_branches(&repo, Some(git2::BranchType::Remote))?;
-            println!("remote filter: \n{}\n", branches.join("\n"));
-        }
         Action::Derive {
             config,
             head,
