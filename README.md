@@ -13,18 +13,20 @@ This tool does two primary things:
 ## Usage
 
 ```
-❯ manifest derive --help
-Usage: manifest derive [OPTIONS]
+❯ manifest --help
+Usage: manifest [REPO_PATH] <COMMAND>
+
+Commands:
+  get-deployable-ref
+  derive
+  help                Print this message or the help of the given subcommand(s)
+
+Arguments:
+  [REPO_PATH]  [default: .]
 
 Options:
-      --config <CONFIG>  [default: .manifest.yaml]
-      --head <HEAD>      Defaults to the current branch
-      --base <BASE>      Defaults to the base defined in the manifest config
-  -f, --force...         Forces all services to be activated
-      --force-on-base    Apply force if building on base
-      --actions-output   Write manifest into github actions output
-      --step-summary     Write manifest summary into github actions step summary
-  -h, --help             Print help
+  -h, --help     Print help
+  -V, --version  Print version
 ```
 
 
