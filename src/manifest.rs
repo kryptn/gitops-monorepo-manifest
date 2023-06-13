@@ -121,6 +121,7 @@ impl Manifest {
         out
     }
 
+    #[allow(clippy::let_with_type_underscore)]
     #[tracing::instrument(skip(self))]
     fn inactive_targets(&self) -> impl Iterator<Item = String> + '_ {
         self.targets
