@@ -12,3 +12,21 @@ release part:
 push-release:
     git push
     git push --tags
+
+check:
+    cargo check
+
+fmt:
+    cargo fmt
+
+test:
+    cargo test
+
+clippy:
+    cargo clippy
+
+ci:
+    just check
+    just fmt
+    just test
+    just clippy
