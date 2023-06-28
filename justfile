@@ -1,6 +1,7 @@
-default: (release "patch")
+default:
+  @just --list
 
-release part:
+release part="patch":
     #!/usr/bin/env bash
     set -euxo pipefail
     cargo bump {{part}}
