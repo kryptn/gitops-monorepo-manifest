@@ -27,9 +27,7 @@ pub fn get_merge_base(repo: &Repository, base: &str, head: &str) -> Result<Strin
 
 pub fn get_current_branch(repo: &Repository) -> Result<String, Error> {
     let head = repo.head()?;
-    let branch = head
-        .name()
-        .ok_or_else(|| Error::from_str("Couldn't determine the branch name"))?;
+    let branch = head.name()?;
     let branch_name = branch
         .strip_prefix("refs/heads/")
         .ok_or_else(|| Error::from_str("Invalid branch reference"))?;
